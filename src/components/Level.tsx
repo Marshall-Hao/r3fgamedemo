@@ -324,7 +324,6 @@ export function Level({
 
   return (
     <>
-      <OrbitControls></OrbitControls>
       <BlockStart position={[0, 0, 0]}></BlockStart>
       {blocks.map((Block, index) => (
         // * Block is the reactnode component

@@ -8,13 +8,21 @@ import {
   Bounds,
   useKeyboardControls,
 } from "@react-three/drei";
-import { useRef, useEffect } from "react";
+import { Vector3 } from "three";
+import { useRef, useEffect, useState } from "react";
 
 export default function Player() {
+  const [smoothedCameraPosition] = useState<Vector3>(
+    () => new Vector3(10, 10, 10)
+  );
+
+  const [smoothedCameraTarget] = useState<Vector3>(
+    () => new Vector3()
+  );
+
   const body = useRef<RapierRigidBody>();
   const [subscribeKeys, getKeys] = useKeyboardControls();
-  console.log(subscribeKeys);
-  console.log(getKeys);
+
   const { rapier, world } = useRapier();
   // * get the phsics world cuzed by rapier
   const rapierWorld = world.raw();
@@ -57,6 +65,7 @@ export default function Player() {
   });
 
   useFrame((state, delta) => {
+    // * Controls
     const { forward, backward, leftward, rightward, jump } =
       getKeys();
 
@@ -88,6 +97,27 @@ export default function Player() {
 
     body.current?.applyImpulse(impulse, true);
     body.current?.applyTorqueImpulse(torque, true);
+
+    // * Camera
+    const bodyPosition = body.current?.translation();
+    const cameraPosition = new Vector3();
+    cameraPosition.copy(bodyPosition);
+    // * 稍微在球的位置上加了一点，往后退了点
+    cameraPosition.z += 2.25;
+    cameraPosition.y += 0.65;
+
+    const cameraTarget = new Vector3();
+    cameraTarget.copy(bodyPosition);
+    // * adjust camera look where
+    // * 稍微在球的位置上加了一点
+    cameraTarget.y += 0.25;
+
+    // * smooth the camera postion ,make it feel it animating throught the ball position change, other wisit will be too direct to animate
+    smoothedCameraPosition.lerp(cameraPosition, 5 * delta);
+    smoothedCameraTarget.lerp(cameraTarget, 5 * delta);
+    // * smooth the camera postion wills generally step by step animated to the desired cameraPosition or target, more realistic
+    state.camera.position.copy(smoothedCameraPosition);
+    state.camera.lookAt(smoothedCameraTarget);
   });
 
   return (
