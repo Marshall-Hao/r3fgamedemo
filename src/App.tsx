@@ -10,6 +10,7 @@ import {
   BlockAxe,
 } from "./components/Level";
 import Player from "./components/Player";
+import Interface from "./components/interface";
 
 function App() {
   return (
@@ -39,6 +40,7 @@ function App() {
           <Player></Player>
         </Physics>
       </Canvas>
+      <Interface></Interface>
     </KeyboardControls>
   );
 }
