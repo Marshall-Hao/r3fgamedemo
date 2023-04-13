@@ -10,6 +10,7 @@ import {
 } from "@react-three/drei";
 import { Vector3 } from "three";
 import { useRef, useEffect, useState } from "react";
+import useGame from "../stores/useGame";
 
 export default function Player() {
   const [smoothedCameraPosition] = useState<Vector3>(
@@ -27,6 +28,14 @@ export default function Player() {
   // * get the phsics world cuzed by rapier
   const rapierWorld = world.raw();
 
+  // * global state
+  const start = useGame((state) => state.start);
+
+  const end = useGame((state) => state.end);
+  const restart = useGame((state) => state.restart);
+
+  const blockCount = useGame((state) => state.blockCount);
+
   const jump = () => {
     // * center how much has moved
     const origin = body.current?.translation();
@@ -37,7 +46,7 @@ export default function Player() {
     const ray = new rapier.Ray(origin, direction);
     // * the whole plane will be as the panel to take the force
     const hit = rapierWorld.castRay(ray, 10, true);
-    console.log(hit);
+    // console.log(hit);
     // * time of impulse,impulse wont be always big, will have a floor raw to let it drop
     if (hit?.toi < 0.15) {
       body.current?.applyImpulse(
@@ -47,7 +56,21 @@ export default function Player() {
     }
   };
 
+  const reset = () => {
+    // * 全部重置， 位置， 速度，角速度
+    body.current?.setTranslation({ x: 0, y: 1, z: 0 });
+    body.current?.setLinvel({ x: 0, y: 0, z: 0 });
+    body.current?.setAngvel({ x: 0, y: 0, z: 0 });
+  };
+
   useEffect(() => {
+    const unsubscribeState = useGame.subscribe(
+      (state) => state.phase,
+      (value) => {
+        if (value === "ready") reset();
+      }
+    );
+
     const unsubscribeJump = subscribeKeys(
       (state) => {
         // * subscribe to jump action
@@ -58,11 +81,18 @@ export default function Player() {
       }
     );
 
+    const unsubscribeAny = subscribeKeys(() => {
+      // * press any key in the map,trigger the game
+      start();
+    });
+
     return () => {
       // * unsubscribe the event, since if component destroy ,will mount again, and regist the event again
       unsubscribeJump();
+      unsubscribeAny();
+      unsubscribeState();
     };
-  });
+  }, []);
 
   useFrame((state, delta) => {
     // * Controls
@@ -118,6 +148,17 @@ export default function Player() {
     // * smooth the camera postion wills generally step by step animated to the desired cameraPosition or target, more realistic
     state.camera.position.copy(smoothedCameraPosition);
     state.camera.lookAt(smoothedCameraTarget);
+
+    // * phases
+    // * 因为是向后延伸，所以是负值，小于他 相当于距离超过他
+    if (bodyPosition.z < -(blockCount * 4 + 2)) {
+      end();
+    }
+
+    // * 掉下去了，y<0
+    if (bodyPosition.y < -4) {
+      restart();
+    }
   });
 
   return (
