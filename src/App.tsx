@@ -10,13 +10,15 @@ import useGame from "./stores/useGame";
 function App() {
   // * will cause re-render
   const blockcount = useGame((state) => state.blockCount);
+  const blockseed = useGame((state) => state.blockSeed);
+
   console.log(blockcount);
   return (
     <>
       <Physics>
         <Debug></Debug>
         <Lights></Lights>
-        <Level count={blockcount}></Level>
+        <Level count={blockcount} seed={blockseed}></Level>
         <Player></Player>
       </Physics>
     </>

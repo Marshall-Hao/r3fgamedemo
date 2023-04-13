@@ -4,6 +4,7 @@ import { subscribeWithSelector } from "zustand/middleware";
 type TState = {
   blockCount: number;
   phase: "ready" | "playing" | "ended";
+  blockSeed: number;
   startTime: number;
   endTime: number;
   start: () => Partial<TState>;
@@ -14,9 +15,9 @@ type TState = {
 export default create(
   subscribeWithSelector<TState>((set) => {
     return {
-      blockCount: 3,
+      blockCount: 10,
       phase: "ready",
-
+      blockSeed: 0,
       // * time
       startTime: 0,
       endTime: 0,
@@ -40,7 +41,10 @@ export default create(
             state.phase === "playing" ||
             state.phase === "ended"
           )
-            return { phase: "ready" };
+            return {
+              phase: "ready",
+              blockSeed: Math.random(),
+            };
 
           return {};
         });

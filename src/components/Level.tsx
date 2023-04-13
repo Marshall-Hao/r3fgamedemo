@@ -305,11 +305,13 @@ type TLevel = {
     typeof BlockAxe,
     typeof BlockLimbo
   ];
+  seed: number;
 };
 
 export function Level({
   count = 5,
   types = [BlockSpinner, BlockAxe, BlockLimbo],
+  seed = 0,
 }: TLevel): ReactNode {
   const blocks = useMemo(() => {
     const blocks = [];
@@ -320,7 +322,7 @@ export function Level({
     }
 
     return blocks;
-  }, [count, types]);
+  }, [count, types, seed]);
 
   return (
     <>
