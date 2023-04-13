@@ -6,6 +6,7 @@ import Lights from "./components/Lights";
 import { Level } from "./components/Level";
 import Player from "./components/Player";
 import useGame from "./stores/useGame";
+import RealEffect from "./components/RealEffect";
 
 function App() {
   // * will cause re-render
@@ -15,12 +16,15 @@ function App() {
   console.log(blockcount);
   return (
     <>
+      <color args={["#252731"]} attach="background" />
+
       <Physics>
-        <Debug></Debug>
+        {/* <Debug></Debug> */}
         <Lights></Lights>
         <Level count={blockcount} seed={blockseed}></Level>
         <Player></Player>
       </Physics>
+      <RealEffect></RealEffect>
     </>
   );
 }

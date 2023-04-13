@@ -20,7 +20,7 @@ export default function Lights() {
     light.current.target.updateMatrixWorld();
   });
 
-  useHelper(light, DirectionalLightHelper);
+  // useHelper(light, DirectionalLightHelper);
 
   return (
     <>

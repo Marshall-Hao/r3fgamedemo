@@ -1,5 +1,10 @@
 import { useFrame } from "@react-three/fiber";
-import { OrbitControls, useGLTF } from "@react-three/drei";
+import {
+  OrbitControls,
+  useGLTF,
+  Float,
+  Text,
+} from "@react-three/drei";
 import {
   RigidBody,
   CuboidCollider,
@@ -22,6 +27,7 @@ import {
   Vector3,
   Quaternion,
   Euler,
+  MeshBasicMaterial,
 } from "three";
 
 type TBlockStartProps = {
@@ -33,19 +39,24 @@ ColorManagement.legacyMode = false;
 // * for good performance, same geometry obj can use other place
 const boxGeometry = new BoxGeometry(1, 1, 1);
 const floor1Material = new MeshStandardMaterial({
-  color: "limegreen",
+  color: "#111111",
+  metalness: 0,
+  roughness: 0,
 });
-
 const floor2Material = new MeshStandardMaterial({
-  color: "greenyellow",
+  color: "#222222",
+  metalness: 0,
+  roughness: 0,
 });
-
 const obstacleMaterial = new MeshStandardMaterial({
-  color: "orangered",
+  color: "#ff0000",
+  metalness: 0,
+  roughness: 1,
 });
-
 const wallMaterial = new MeshStandardMaterial({
-  color: "slategrey",
+  color: "#887777",
+  metalness: 0,
+  roughness: 0,
 });
 
 // * modify how the three,js handling color
@@ -55,6 +66,23 @@ export function BlockStart({
 }): ReactElement<TBlockStartProps> {
   return (
     <group position={position}>
+      <Float floatIntensity={0.25} rotationIntensity={0.25}>
+        <Text
+          font="/public/bebas-neue-v9-latin-regular.woff"
+          scale={0.3}
+          maxWidth={0.25}
+          lineHeight={0.75}
+          textAlign="right"
+          position={[0.75, 0.65, 0]}
+          rotation-y={-0.25}
+        >
+          Marble Race
+          <meshBasicMaterial
+            // * disable the SRGB encoding
+            toneMapped={false}
+          ></meshBasicMaterial>
+        </Text>
+      </Float>
       {/* //* floor */}
       <mesh
         position={[0, -0.1, 0]}
@@ -224,6 +252,14 @@ export function BlockEnd({
 
   return (
     <group position={position}>
+      <Text
+        font="/public/bebas-neue-v9-latin-regular.woff"
+        scale={0.3}
+        position={[0, 2.25, 2]}
+      >
+        FINISH
+        <meshBasicMaterial toneMapped={false} />
+      </Text>
       {/* //* floor */}
       <mesh
         position={[0, -0.1, 0]}

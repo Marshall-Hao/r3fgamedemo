@@ -27,6 +27,7 @@ ReactDOM.createRoot(
       }}
       shadows
     >
+      {/* <RealEffect></RealEffect> */}
       <App />
     </Canvas>
     <Interface></Interface>
