@@ -35,6 +35,7 @@ const gamesComponent = Promise.all(examplePromises).then(
 );
 type fileName = "Level" | "Lights";
 
+// * ts cannot run on runtime, only compile time,so it does not know whats inside an array after some operations
 type TModules = Record<
   fileName,
   JSXElementConstructor<any>
