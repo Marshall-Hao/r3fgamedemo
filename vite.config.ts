@@ -7,14 +7,24 @@ const isCodeSandbox =
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  publicDir: "./public",
+  base: "/",
+  publicDir: "public",
   server: {
     host: true,
     open: !isCodeSandbox, // Open if it's not a CodeSandbox
   },
   build: {
-    outDir: "./dist",
+    outDir: "dist",
     emptyOutDir: true,
-    sourcemap: true,
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (id.includes("node_modules")) {
+            return "vendor";
+          }
+        },
+      },
+    },
   },
 });
