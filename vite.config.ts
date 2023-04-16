@@ -7,7 +7,7 @@ const isCodeSandbox =
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: "/",
+  base: "/r3fgamedemo/",
   publicDir: "public",
   server: {
     host: true,
