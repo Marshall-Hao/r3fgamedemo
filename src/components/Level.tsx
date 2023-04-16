@@ -68,7 +68,7 @@ export function BlockStart({
     <group position={position}>
       <Float floatIntensity={0.25} rotationIntensity={0.25}>
         <Text
-          font="/bebas-neue-v9-latin-regular.woff"
+          font="./bebas-neue-v9-latin-regular.woff"
           scale={0.3}
           maxWidth={0.25}
           lineHeight={0.75}
@@ -244,7 +244,7 @@ export function BlockAxe({
 export function BlockEnd({
   position = [0, 0, 0] as unknown as Vector3,
 }): ReactElement<TBlockStartProps> {
-  const hamburger = useGLTF("/hamburger.glb");
+  const hamburger = useGLTF("./hamburger.glb");
 
   hamburger.scene.children.forEach((mesh) => {
     mesh.castShadow = true;
@@ -253,7 +253,7 @@ export function BlockEnd({
   return (
     <group position={position}>
       <Text
-        font="/bebas-neue-v9-latin-regular.woff"
+        font="./bebas-neue-v9-latin-regular.woff"
         scale={0.3}
         position={[0, 2.25, 2]}
       >
