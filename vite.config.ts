@@ -7,7 +7,7 @@ const isCodeSandbox =
 // https://vitejs.dev/config/
 export default defineConfig({
   plugins: [react()],
-  publicDir: "../public/",
+  publicDir: "./public",
   server: {
     host: true,
     open: !isCodeSandbox, // Open if it's not a CodeSandbox
