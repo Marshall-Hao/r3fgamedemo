@@ -8,7 +8,6 @@ const isCodeSandbox =
 export default defineConfig({
   plugins: [react()],
   publicDir: "../public/",
-  base: "./",
   server: {
     host: true,
     open: !isCodeSandbox, // Open if it's not a CodeSandbox
